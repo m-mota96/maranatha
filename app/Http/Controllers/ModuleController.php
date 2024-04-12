@@ -6,7 +6,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use App\Models\Module;
 
-class ModulesController extends Controller
+class ModuleController extends Controller
 {
     public function modules() {
         $modules = Module::with(['subModules.dad' => function($query){

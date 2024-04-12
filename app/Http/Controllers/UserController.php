@@ -37,13 +37,15 @@ class UserController extends Controller
 
         $user = User::where('user', $request->user)->first();
         if (!empty($user)) {
-            return response()->json([
-                'error' => true,
-                'msj'   => 'El usuario usuario que ingresó ya se ecnuentra reistrado<br>Por favor intente con otro.'
-            ], 200);
+            if ($request->userId != $user->id) {
+                return response()->json([
+                    'error' => true,
+                    'msj'   => 'El usuario que ingresó ya se ecnuentra registrado<br>Por favor intente con otro.'
+                ], 200);
+            }
         }
 
-        if ($request->password != $passwordTwo) {
+        if ($request->password != $request->passwordTwo) {
             return response()->json([
                 'error' => true,
                 'msj'   => 'Las contraseñas no coinciden.'
@@ -63,7 +65,9 @@ class UserController extends Controller
             $txt = 'modifico';
             $user->name     = trim($request->nameUser);
             $user->user     = trim($request->user);
-            $user->password = Hash::make(trim($request->password));
+            if (!empty($request->password)) {
+                $user->password = Hash::make(trim($request->password));
+            }
             $user->save();
         }
         return response()->json([

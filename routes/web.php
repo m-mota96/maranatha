@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ModulesController;
+use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
@@ -16,7 +16,7 @@ Route::get('/', function () {
 
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-    Route::get('/configuracion_menu', [ModulesController::class, 'modules'])->name('configuracion_menu');
+    Route::get('/configuracion_menu', [ModuleController::class, 'modules'])->name('configuracion_menu');
     Route::get('/configuracion_usuarios', [UserController::class, 'users'])->name('configuracion_usuarios');
 });
 
@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 
-Route::get('getModules', [ModulesController::class, 'getModules']);
-Route::post('createModifyModule', [ModulesController::class, 'createModifyModule']);
+Route::get('getModules', [ModuleController::class, 'getModules']);
+Route::post('createModifyModule', [ModuleController::class, 'createModifyModule']);
 Route::get('getUsers', [UserController::class, 'getUsers']);
+Route::post('createModifyUser', [UserController::class, 'createModifyUser']);

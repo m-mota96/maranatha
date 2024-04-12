@@ -12,7 +12,7 @@
                     <div class="col-xl-12">
                         <input class="form-control" type="hidden" name="userId" id="userId">
                         <label for="nameUser">Nombre:</label>
-                        <input class="form-control form-control-sm mb-3" type="text" name="nameUser" id="nameModule" autocomplete="off" required>
+                        <input class="form-control form-control-sm mb-3" type="text" name="nameUser" id="nameUser" autocomplete="off" required>
                         <label for="user">Usuario:</label>
                         <input class="form-control form-control-sm mb-3" type="text" name="user" id="user" autocomplete="off" required>
                         <label for="password">Contraseña:</label>

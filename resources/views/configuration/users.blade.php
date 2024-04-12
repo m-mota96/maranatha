@@ -50,7 +50,7 @@
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json'},
                 },
-                order: [[1, 'ASC']],
+                order: [[0, 'DESC']],
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'name', name: 'name' },
@@ -63,8 +63,8 @@
                             var data = JSON.stringify(row);
                             data = data.replace(/['"]+/g, "'");
                             var buttons = `<div class="btn-group">`;
-                                buttons += `<button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar módulo" onclick="openModal(${data})"><i class="fa-solid fa-pen"></i></button>`;
-                                buttons += `<button class="btn btn-danger btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Desactivar módulo"><i class="fa-solid fa-eye"></i></button>`;
+                                buttons += `<button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar usuario" onclick="openModal(${data})"><i class="fa-solid fa-pen"></i></button>`;
+                                buttons += `<button class="btn btn-danger btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Desactivar usuario"><i class="fa-solid fa-eye"></i></button>`;
                             buttons += '</div>';
                             return buttons;
                         }
