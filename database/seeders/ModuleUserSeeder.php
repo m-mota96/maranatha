@@ -23,11 +23,6 @@ class ModuleUserSeeder extends Seeder
             'user_id' => 1
         ];
 
-        $module_user[2] = [
-            'module_id' => 3,
-            'user_id' => 1
-        ];
-
         DB::table('module_user')->insert($module_user);
     }
 }

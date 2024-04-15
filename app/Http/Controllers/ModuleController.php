@@ -5,19 +5,26 @@ namespace App\Http\Controllers;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use App\Models\Module;
+use App\Traits\Modules;
 
 class ModuleController extends Controller
 {
     public function modules() {
-        $modules = Module::with(['subModules.dad' => function($query){
-            $query->whereHas('users', function($query) {
-                $query->where('user_id', auth()->user()->id);
-            });
-        }])->where('status', 1)->where('module_id', null)
-        ->whereHas('users', function($query) {
-            $query->where('user_id', auth()->user()->id);
-        })->get();
-
+        // $modules = Module::with(['submodules' => function($query) {
+        //     $query->whereHas('users', function($query2) {
+        //         $query2->where('user_id', auth()->user()->id);
+        //     });
+        // }, 'submodules.submodules' => function($query) {
+        //     $query->whereHas('users', function($query2) {
+        //         $query2->where('user_id', auth()->user()->id);
+        //     });
+        // }])->whereHas('users', function($query) {
+        //     $query->where('user_id', auth()->user()->id);
+        // })
+        // ->where('status', 1)->where('module_id', null)
+        // ->get();
+        $modules = Modules::modulesMenu();
+        // dd($modules[0]->submodules[2]->submodules);
         $module = Module::with(['dad'])->where('id', 2)->first();
         
         return view('configuration.modules')->with([
@@ -27,7 +34,7 @@ class ModuleController extends Controller
     }
 
     public function getModules() {
-        return DataTables::make(Module::all())->toJson();
+        return DataTables::make(Module::from('modules as m')->with(['dad'])->select('m.*'))->toJson();
     }
 
     public function createModifyModule(Request $request) {

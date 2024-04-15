@@ -14,11 +14,7 @@
                         <th>Id</th>
                         <th>Nombre</th>
                         <th>Usuario</th>
-                        <th>
-                            <button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-custom-class="custom-tooltip"
-                            data-bs-title="Nuevo usuario" onclick="openModal()"><i class="fa-solid fa-circle-plus"></i></button>
-                        </th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,12 +23,14 @@
             </table>
         </div>
     </div>
-    @include('configuration.modals.modalUsers')
+    @include('configuration.modals.modalUsersPermissions')
 @endsection
 
 @section('scripts')
     <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script>
+        const modules = @json($allModules);
+
         $(document).ready(()=> {
             tableUsers();
         });
@@ -64,8 +62,7 @@
                             var data = JSON.stringify(row);
                             data = data.replace(/['"]+/g, "'");
                             var buttons = `<div class="btn-group">`;
-                                buttons += `<button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar usuario" onclick="openModal(${data})"><i class="fa-solid fa-pen"></i></button>`;
-                                buttons += `<button class="btn btn-danger btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Desactivar usuario"><i class="fa-solid fa-eye"></i></button>`;
+                                buttons += `<button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar permisos" onclick="openModal(${data})"><i class="fa-solid fa-pen"></i></button>`;
                             buttons += '</div>';
                             return buttons;
                         }
@@ -82,21 +79,34 @@
         }
 
         function openModal(data = null) {
-            $('#modalUsers .form-control').val('');
-            $('#modalUsers #modalUsersLabel').text('Crear usuario');
-            $('#modalUsers #btnSave').text('Guardar');
-            $('#modalUsers #password').attr('required', true);
-            $('#modalUsers #passwordTwo').attr('required', true);
-            if (data != null) {
-                $('#modalUsers #userId').val(data.id);
-                $('#modalUsers #nameUser').val(data.name);
-                $('#modalUsers #user').val(data.user);
-                $('#modalUsers #modalUsersLabel').text('Editar usuario');
-                $('#modalUsers #btnSave').text('Guardar cambios');
-                $('#modalUsers #password').attr('required', false);
-                $('#modalUsers #passwordTwo').attr('required', false);
-            }
-            $('#modalUsers').modal('show');
+            var html = '';
+            html += `<div col-xl-12><ul>`;
+                modules.forEach(m => {
+                    html += `
+                        <input class="form-check-input pointer me-1" type="checkbox" value="" id="${m.id}">
+                        <label class="form-check-label pointer" for="${m.id}">${m.name}</label>
+                    `;
+                    console.log(m);
+                    html += `<ul>`;
+                        m.submodules.forEach(sm => {
+                            html += `
+                                <input class="form-check-input pointer me-1" type="checkbox" value="" id="${sm.id}">
+                                <label class="form-check-label pointer" for="${sm.id}">${sm.name}</label>
+                            `;
+                            html += `<ul>`;
+                                sm.submodules.forEach(sm2 => {
+                                    html += `
+                                        <input class="form-check-input pointer me-1" type="checkbox" value="" id="${sm2.id}">
+                                        <label class="form-check-label pointer" for="${sm2.id}">${sm2.name}</label>
+                                    `;
+                                });
+                            html += `</ul>`;
+                        });
+                    html += `</ul>`;
+                });
+            html += `</ul></div>`;
+            $('#contentUsersPermissions').html(html);
+            $('#modalUsersPermissions').modal('show');
         }
 
         $('#modalUsersForm').submit((e)=> {

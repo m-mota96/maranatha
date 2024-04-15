@@ -7,25 +7,16 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Module;
 use App\Models\User;
+use App\Traits\Modules;
 
 class UserController extends Controller
 {
     public function users() {
-
-        $modules = Module::with(['subModules.dad' => function($query){
-            $query->whereHas('users', function($query) {
-                $query->where('user_id', auth()->user()->id);
-            });
-        }])->where('status', 1)->where('module_id', null)
-        ->whereHas('users', function($query) {
-            $query->where('user_id', auth()->user()->id);
-        })->get();
-
         $module = Module::with(['dad'])->where('id', 3)->first();
 
         return view('configuration.users')->with([
             'modulo' => $module,
-            'menu' => $modules
+            'menu' => Modules::modulesMenu()
         ]);
     }
 

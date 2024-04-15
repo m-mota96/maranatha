@@ -1,7 +1,7 @@
 @extends('index')
 
 @section('heads')
-    <title>{{auth()->user()->name}} | Administración</title>
+    <title>{{auth()->user()->name}} | {{$modulo->name}}</title>
     <link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 @endsection
 
@@ -12,6 +12,7 @@
                 <thead>
                     <tr>
                         <th>Id</th>
+                        <th>Padre</th>
                         <th>Nombre</th>
                         <th>Icono</th>
                         <th>Target</th>
@@ -58,6 +59,13 @@
                 columns: [
                     //{ data: 'idoperacion', name: 'idoperacion', orderable: false, className: "text-center" },
                     { data: 'id', name: 'id' },
+                    {
+                        searchable: false,
+                        orderable: false,
+                        render: (data, type, row, meta) => {
+                            return `<span>${row.dad != null ? row.dad.name : ''}</span>`;
+                        }
+                    },
                     { data: 'name', name: 'name' },
                     { data: 'icon', name: 'icon' },
                     { data: 'target', name: 'target' },

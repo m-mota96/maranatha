@@ -9,7 +9,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item me-2 p-1 active" id="menu-dashboard">
+                    <li class="nav-item me-2 p-1" id="menu-dashboard">
                         <a class="nav-link" aria-current="page" href="{{route('dashboard')}}">
                             <i class="fa-solid fa-house-chimney"></i>
                             <span class="ms-2 me-2">INICIO </span>
@@ -25,9 +25,19 @@
                             @if (sizeof($m->subModules) > 0)
                                 <ul class="dropdown-menu">
                                     @foreach ($m->subModules as $sm)
-                                        <li><a class="dropdown-item" href="{{route($sm->target)}}">{{$sm->name}}</a></li>
+                                        @if (!empty($sm->target))
+                                            <li><a class="dropdown-item" href="{{route($sm->target)}}">{{$sm->name}}</a></li>
+                                        @else
+                                            <li class="dropdown-submenu">
+                                                <a class="dropdown-item" href="#">{{$sm->name}}</a>
+                                                <ul class="dropdown-menu">
+                                                    @foreach ($sm->subModules as $smTwo)
+                                                        <li><a class="dropdown-item" href="{{route($smTwo->target)}}">{{$smTwo->name}}</a></li>
+                                                    @endforeach
+                                                </ul>
+                                            </li>                            
+                                        @endif
                                     @endforeach
-                                    {{-- <li><a class="dropdown-item" href="">Permisos</a></li> --}}
                                 </ul>
                             @endif
                         </li>
