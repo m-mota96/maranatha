@@ -12,8 +12,14 @@ use App\Traits\Modules;
 class UserController extends Controller
 {
     public function users() {
-        $module = Module::with(['dad'])->where('id', 3)->first();
-
+        $module = Module::with(['dad'])->where('id', 3)
+        ->whereHas('users', function($query) {
+            $query->where('user_id', auth()->user()->id);
+        })
+        ->first();
+        if (empty($module)) {
+            return redirect('dashboard');
+        }
         return view('configuration.users')->with([
             'modulo' => $module,
             'menu' => Modules::modulesMenu()
@@ -21,7 +27,7 @@ class UserController extends Controller
     }
 
     public function getUsers(Request $request) {
-        return DataTables::make(User::whereNotIn('id', [1])->select('id', 'name', 'user'))->toJson();
+        return DataTables::make(User::with(['modules'])->whereNotIn('id', [1])->select('id', 'name', 'user'))->toJson();
     }
 
     public function createModifyUser(Request $request) {

@@ -36,3 +36,4 @@ Route::get('getModules', [ModuleController::class, 'getModules']);
 Route::post('createModifyModule', [ModuleController::class, 'createModifyModule']);
 Route::get('getUsers', [UserController::class, 'getUsers']);
 Route::post('createModifyUser', [UserController::class, 'createModifyUser']);
+Route::post('updateUsersPermissions', [UserPermissionController::class, 'updateUsersPermissions']);

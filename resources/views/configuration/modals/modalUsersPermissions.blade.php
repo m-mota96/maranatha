@@ -8,6 +8,7 @@
             </div>
             <div class="modal-body">
                 @csrf
+                <input type="hidden" name="userId" id="userId">
                 <div class="row" id="contentUsersPermissions">
                     
                 </div>

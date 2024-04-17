@@ -41,11 +41,15 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('user', 'password'), $this->boolean('remember'))) {
+        $credentials = $this->only('user', 'password');
+        $credentials = array_merge($credentials, ['active' => 1]);
+        
+        // if (! Auth::attempt($this->only('user', 'password'), $this->boolean('remember'))) {
+        if (! Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'user' => trans('auth.failed'),
+                'user' => 'Datos de acceso incorrectos',
             ]);
         }
 

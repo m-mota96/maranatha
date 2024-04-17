@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('fontawesome6.5.1/css/all.css')}}">
+    <link rel="shortcut icon" href="{{asset('general/icono2.png')}}" type="image/x-icon">
     <style>
         body {
             background-color: #56077E;
@@ -120,6 +121,15 @@
             --bs-table-striped-bg: #f9f9f9 !important;
         }
 
+        .selection-disable {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
         
         .dropdown-submenu {
             position: relative;
@@ -168,6 +178,9 @@
             -moz-border-radius: 6px 0 6px 6px;
             border-radius: 6px 0 6px 6px;
         }
+        .img-footer {
+            width: 80px;
+        }
     </style>
     @yield('heads')
 </head>
@@ -186,8 +199,11 @@
             @yield('content')
         </div>
         <div class="row">
-            <div class="col-xl-12 pt-3 pb-3">
+            <div class="col-xl-4 pt-3 pb-3">
                 <span class="text-color bold">{{date('Y')}}© Temazcal Maranatha</span>
+            </div>
+            <div class="col-xl-4 text-center justify-content-center">
+                <img class="mt-2 img-footer" src="{{asset('general/icono3.png')}}" alt="Temazcal Maranatha">
             </div>
         </div>
     </div>
@@ -201,7 +217,7 @@
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
-        var moduleActive = '#menu-'+@json(strtolower(isset($modulo->dad->name) ? $modulo->dad->name : 'dashboard'));
+        var moduleActive = '#menu-'+@json(strtolower(isset($modulo->dad->name) ? isset($modulo->dad->dad->name) ? $modulo->dad->dad->name : $modulo->dad->name : 'dashboard'));
         $('.nav-item').removeClass('active');
         $(moduleActive).addClass('active');
     </script>

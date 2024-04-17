@@ -22,16 +22,16 @@
                                 @if(!empty($m->icon)) <i class="{{$m->icon}}"></i> @endif
                                 <span class="ms-2 me-2">{{{$m->name}}}</span>
                             </a>
-                            @if (sizeof($m->subModules) > 0)
+                            @if (sizeof($m->submodules) > 0)
                                 <ul class="dropdown-menu">
-                                    @foreach ($m->subModules as $sm)
+                                    @foreach ($m->submodules as $sm)
                                         @if (!empty($sm->target))
                                             <li><a class="dropdown-item" href="{{route($sm->target)}}">{{$sm->name}}</a></li>
                                         @else
                                             <li class="dropdown-submenu">
                                                 <a class="dropdown-item" href="#">{{$sm->name}}</a>
                                                 <ul class="dropdown-menu">
-                                                    @foreach ($sm->subModules as $smTwo)
+                                                    @foreach ($sm->submodules as $smTwo)
                                                         <li><a class="dropdown-item" href="{{route($smTwo->target)}}">{{$smTwo->name}}</a></li>
                                                     @endforeach
                                                 </ul>
@@ -42,16 +42,6 @@
                             @endif
                         </li>
                     @endforeach
-                    {{-- <li class="nav-item me-2 p-1 dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-gear"></i> 
-                            <span class="ms-2 me-2">Configuración</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="">Menú</a></li>
-                            <li><a class="dropdown-item" href="">Permisos</a></li>
-                        </ul>
-                    </li> --}}
                 </ul>
             </div>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">

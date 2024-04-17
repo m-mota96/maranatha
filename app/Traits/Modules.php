@@ -23,7 +23,7 @@ trait Modules {
     }
 
     public static function allModules() {
-        $modules = Module::with(['submodules.submodules'])->where('status', 1)->where('module_id', null)->get();
+        $modules = Module::with(['submodules.submodules', 'submodules.dad', 'submodules.submodules.dad'])->where('status', 1)->where('module_id', null)->get();
         return $modules;
     }
 }

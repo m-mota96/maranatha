@@ -10,26 +10,17 @@ use App\Traits\Modules;
 class ModuleController extends Controller
 {
     public function modules() {
-        // $modules = Module::with(['submodules' => function($query) {
-        //     $query->whereHas('users', function($query2) {
-        //         $query2->where('user_id', auth()->user()->id);
-        //     });
-        // }, 'submodules.submodules' => function($query) {
-        //     $query->whereHas('users', function($query2) {
-        //         $query2->where('user_id', auth()->user()->id);
-        //     });
-        // }])->whereHas('users', function($query) {
-        //     $query->where('user_id', auth()->user()->id);
-        // })
-        // ->where('status', 1)->where('module_id', null)
-        // ->get();
-        $modules = Modules::modulesMenu();
-        // dd($modules[0]->submodules[2]->submodules);
-        $module = Module::with(['dad'])->where('id', 2)->first();
-        
+        $module = Module::with(['dad'])->where('id', 2)
+        ->whereHas('users', function($query) {
+            $query->where('user_id', auth()->user()->id);
+        })
+        ->first();
+        if (empty($module)) {
+            return redirect('dashboard');
+        }
         return view('configuration.modules')->with([
             'modulo' => $module,
-            'menu' => $modules
+            'menu' => Modules::modulesMenu()
         ]);
     }
 

@@ -40,6 +40,24 @@ class ModuleSeeder extends Seeder
             'updated_at' => date('Y-m-d H:i:s'),
         ];
 
+        $modules[3] = [
+            'module_id' => 1,
+            'name' => 'Permisos',
+            'target' => null,
+            'icon' => null,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
+        $modules[4] = [
+            'module_id' => 4,
+            'name' => 'Permisos de usuarios',
+            'target' => 'configuracion_permisos_usuarios',
+            'icon' => null,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
         Module::insert($modules);
     }
 }
