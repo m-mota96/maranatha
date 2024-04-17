@@ -5,27 +5,33 @@ namespace App\Http\Controllers;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use App\Models\Module;
+use App\Models\Permission;
 use App\Traits\Modules;
 
 class ModuleController extends Controller
 {
     public function modules() {
-        $module = Module::with(['dad'])->where('id', 2)
-        ->whereHas('users', function($query) {
-            $query->where('user_id', auth()->user()->id);
-        })
-        ->first();
+        $module = Modules::module(2);
         if (empty($module)) {
             return redirect('dashboard');
         }
+
+        $permissions = Permission::where('module_id', $module->id)->whereHas('users', function($query) {
+            $query->where('user_id', auth()->user()->id);
+        })->get();
+        $permissionsUser = [];
+        foreach ($permissions as $key => $p) {
+            $permissionsUser[] = $p->id;
+        }
         return view('configuration.modules')->with([
             'modulo' => $module,
-            'menu' => Modules::modulesMenu()
+            'menu' => Modules::modulesMenu(),
+            'permissions' => $permissionsUser
         ]);
     }
 
     public function getModules() {
-        return DataTables::make(Module::from('modules as m')->with(['dad'])->select('m.*'))->toJson();
+        return DataTables::make(Module::from('modules as m')->with(['dad', 'permissions'])->select('m.*'))->toJson();
     }
 
     public function createModifyModule(Request $request) {

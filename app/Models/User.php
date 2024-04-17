@@ -49,4 +49,8 @@ class User extends Authenticatable
     public function modules() {
         return $this->belongsToMany(Module::class);
     }
+
+    public function permissions() {
+        return $this->belongsToMany(Permission::class)->orderBy('name');
+    }
 }

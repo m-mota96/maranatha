@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\ModulePermissionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPermissionController;
 use App\Http\Controllers\ProfileController;
@@ -20,6 +21,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/configuracion_menu', [ModuleController::class, 'modules'])->name('configuracion_menu');
     Route::get('/configuracion_usuarios', [UserController::class, 'users'])->name('configuracion_usuarios');
     Route::get('/configuracion_permisos_usuarios', [UserPermissionController::class, 'usersPermissions'])->name('configuracion_permisos_usuarios');
+    Route::get('/configuracion_permisos_modulos', [ModulePermissionController::class, 'modulesPermissions'])->name('configuracion_permisos_modulos');
 });
 
 
@@ -37,3 +39,5 @@ Route::post('createModifyModule', [ModuleController::class, 'createModifyModule'
 Route::get('getUsers', [UserController::class, 'getUsers']);
 Route::post('createModifyUser', [UserController::class, 'createModifyUser']);
 Route::post('updateUsersPermissions', [UserPermissionController::class, 'updateUsersPermissions']);
+Route::post('updateModulesPermissions', [ModulePermissionController::class, 'updateModulesPermissions']);
+Route::post('deletePermissionUser', [ModulePermissionController::class, 'deletePermissionUser']);

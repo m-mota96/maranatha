@@ -29,7 +29,7 @@
 @section('scripts')
     <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script>
-        const modules = @json($allModules);
+        const allModules = @json($allModules);
         // console.log(modules);
 
         $(document).ready(()=> {
@@ -60,10 +60,12 @@
                         className: "text-center",
                         // width: '8%',
                         render: (data, type, row, meta) => {
-                            var data = JSON.stringify(row.modules);
-                            data = data.replace(/['"]+/g, "'");
+                            var modules = JSON.stringify(row.modules);
+                            modules = modules.replace(/['"]+/g, "'");
+                            var permissions = JSON.stringify(row.permissions);
+                            permissions = permissions.replace(/['"]+/g, "'");
                             var buttons = `<div class="btn-group">`;
-                                buttons += `<button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar permisos" onclick="openModal(${row.id}, ${data})"><i class="fa-solid fa-pen"></i></button>`;
+                                buttons += `<button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar permisos" onclick="openModal(${row.id}, ${modules}, ${permissions})"><i class="fa-solid fa-pen"></i></button>`;
                             buttons += '</div>';
                             return buttons;
                         }
@@ -79,49 +81,78 @@
             });
         }
 
-        function openModal(userId, data = null) {
+        function openModal(userId, modules, permissions) {
             $('#modalUsersPermissions #userId').val(userId);
-            var checked = '', cont = 0;
+            var checked = '', checked2 = '', cont = 0, cont2 = 0;
             var html = '';
             html += `<div col-xl-12>`;
-                modules.forEach(m => {
+                allModules.forEach(m => {
                     html += `<ul>`;
                         checked = '';
-                        data.forEach(d => {
+                        modules.forEach(d => {
                             if (d.id == m.id) {
                                 checked = 'checked';
                             }
                         });
                         html += `
                             <input class="form-check-input pointer me-1 dad-${m.id}" type="checkbox" name="modulesActive[${cont}]" id="module-${m.id}" value="${m.id}" ${checked} onchange="checkUncheckSons(${m.id})">
-                            <label class="form-check-label pointer mb-1 selection-disable" for="module-${m.id}">${m.name}</label>
+                            <label class="form-check-label pointer mb-1 selection-disable bold text-success" for="module-${m.id}">Módulo - ${m.name}</label>
                         `;
                         html += `<ul>`;
                             m.submodules.forEach(sm => {
                                 checked = '';
                                 cont++;
-                                data.forEach(d => {
+                                modules.forEach(d => {
                                     if (d.id == sm.id) {
                                         checked = 'checked';
                                     }
                                 });
                                 html += `
                                     <input class="form-check-input pointer me-1 son-${m.id} dad-${sm.id}" type="checkbox" name="modulesActive[${cont}]" id="module-${sm.id}" value="${sm.id}" ${checked} onchange="checkUncheckDadSon(${m.id}, ${sm.id})">
-                                    <label class="form-check-label pointer mb-1 selection-disable" for="module-${sm.id}">${sm.name}</label>
+                                    <label class="form-check-label pointer mb-1 selection-disable bold text-success" for="module-${sm.id}">Módulo - ${sm.name}</label>
                                 `;
                                 html += `<ul>`;
+                                sm.permissions.forEach(p => {
+                                    checked2 = '';
+                                    permissions.forEach(per => {
+                                        if (per.id == p.id) {
+                                            checked2 = 'checked';
+                                        }
+                                    });
+                                    html += `
+                                        <input class="form-check-input pointer me-1" type="checkbox" name="permissionsActive[${cont2}]" id="permission-${p.id}" value="${p.id}" ${checked2}>
+                                        <label class="form-check-label pointer mb-1 selection-disable" for="permission-${p.id}">${p.name}</label><br>
+                                    `;
+                                    cont2++;
+                                });
+                                html += `</ul>`;
+                                html += `<ul>`;
                                     sm.submodules.forEach(sm2 => {
+                                        // console.log(sm2);
                                         checked = '';
                                         cont++;
-                                        data.forEach(d => {
+                                        modules.forEach(d => {
                                             if (d.id == sm2.id) {
                                                 checked = 'checked';
                                             }
                                         });
                                         html += `
                                             <input class="form-check-input pointer me-1 grandson-${m.id} son-${sm.id}" type="checkbox" name="modulesActive[${cont}]" id="module-${sm2.id}" value="${sm2.id}" ${checked} onchange="checkUncheckDads(${m.id}, ${sm.id}, ${sm2.id})">
-                                            <label class="form-check-label pointer mb-1 selection-disable" for="module-${sm2.id}">${sm2.name}</label><br>
+                                            <label class="form-check-label pointer mb-1 selection-disable bold text-success" for="module-${sm2.id}">Módulo - ${sm2.name}</label><br>
                                         `;
+                                        sm2.permissions.forEach(p => {
+                                            checked2 = '';
+                                            permissions.forEach(per => {
+                                                if (per.id == p.id) {
+                                                    checked2 = 'checked';
+                                                }
+                                            });
+                                            html += `
+                                                <input class="form-check-input pointer me-1" type="checkbox" name="permissionsActive[${cont2}]" id="permission-${p.id}" value="${p.id}" ${checked2}>
+                                                <label class="form-check-label pointer mb-1 selection-disable" for="permission-${p.id}">${p.name}</label><br>
+                                            `;
+                                            cont2++;
+                                        });
                                     });
                                 html += `</ul>`;
                             });

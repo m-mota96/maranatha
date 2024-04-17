@@ -181,11 +181,15 @@
         .img-footer {
             width: 80px;
         }
+        .badge {
+            font-size: 0.7rem !important;
+        }
     </style>
     @yield('heads')
 </head>
 <body>
     <input type="hidden" id="URL" value="{{asset('')}}">
+    <input type="hidden" id="_token" value="{{csrf_token()}}">
     @include('menu')
     <div class="container-fluid ps-4 pe-4 pb-1">
         <div class="row p-4 bg-white radius-top">

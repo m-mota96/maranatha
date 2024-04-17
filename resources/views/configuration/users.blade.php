@@ -15,9 +15,11 @@
                         <th>Nombre</th>
                         <th>Usuario</th>
                         <th>
-                            <button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-custom-class="custom-tooltip"
-                            data-bs-title="Nuevo usuario" onclick="openModal()"><i class="fa-solid fa-circle-plus"></i></button>
+                            @if (in_array(3, $permissions))
+                                <button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="custom-tooltip"
+                                data-bs-title="Nuevo usuario" onclick="openModal()"><i class="fa-solid fa-circle-plus"></i></button>
+                            @endif
                         </th>
                     </tr>
                 </thead>
@@ -33,6 +35,8 @@
 @section('scripts')
     <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script>
+        var permissions = @json($permissions);
+
         $(document).ready(()=> {
             tableUsers();
         });
@@ -64,9 +68,13 @@
                             var data = JSON.stringify(row);
                             data = data.replace(/['"]+/g, "'");
                             var buttons = `<div class="btn-group">`;
-                                buttons += `<button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar usuario" onclick="openModal(${data})"><i class="fa-solid fa-pen"></i></button>`;
-                                buttons += `<button class="btn btn-danger btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Desactivar usuario"><i class="fa-solid fa-eye"></i></button>`;
-                            buttons += '</div>';
+                                if (permissions.includes(5)) {
+                                    buttons += `<button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar usuario" onclick="openModal(${data})"><i class="fa-solid fa-pen"></i></button>`;
+                                }
+                                if (permissions.includes(2)) {
+                                    buttons += `<button class="btn btn-danger btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Desactivar usuario"><i class="fa-solid fa-eye"></i></button>`;
+                                }
+                                buttons += '</div>';
                             return buttons;
                         }
                     },

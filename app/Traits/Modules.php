@@ -5,13 +5,22 @@ use App\Models\Module;
 
 trait Modules {
 
+    public static function module($moduleId) {
+        $module = Module::with(['dad.dad'])->where('id', $moduleId)
+        ->whereHas('users', function($query) {
+            $query->where('user_id', auth()->user()->id);
+        })
+        ->first();
+        return $module;
+    }
+
     public static function modulesMenu() {
         $modules = Module::with(['submodules' => function($query) {
-            $query->whereHas('users', function($query2) {
-                $query2->where('user_id', auth()->user()->id);
-            });
-        }, 'submodules.submodules' => function($query) {
-            $query->whereHas('users', function($query2) {
+            $query->with(['submodules' => function($query2) {
+                $query2->whereHas('users', function($query3) {
+                    $query3->where('user_id', auth()->user()->id);
+                });
+            }])->whereHas('users', function($query2) {
                 $query2->where('user_id', auth()->user()->id);
             });
         }])->whereHas('users', function($query) {
@@ -23,7 +32,13 @@ trait Modules {
     }
 
     public static function allModules() {
-        $modules = Module::with(['submodules.submodules', 'submodules.dad', 'submodules.submodules.dad'])->where('status', 1)->where('module_id', null)->get();
+        $modules = Module::with([
+            'permissions',
+            'submodules.dad',
+            'submodules.permissions',
+            'submodules.submodules.dad',
+            'submodules.submodules.permissions'
+        ])->where('status', 1)->where('module_id', null)->get();
         return $modules;
     }
 }

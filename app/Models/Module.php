@@ -18,10 +18,14 @@ class Module extends Model
     }
 
     public function subModules() {
-        return $this->hasMany(Module::class);
+        return $this->hasMany(Module::class)->orderBy('name');
     }
 
     public function dad() {
         return $this->belongsTo(Module::class, 'module_id', 'id');
+    }
+
+    public function permissions() {
+        return $this->hasMany(Permission::class)->orderBy('name');
     }
 }

@@ -20,9 +20,11 @@
                         <th>Descripción</th>
                         <th>Estatus</th>
                         <th>
-                            <button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-custom-class="custom-tooltip"
-                            data-bs-title="Nuevo módulo" onclick="openModal()"><i class="fa-solid fa-circle-plus"></i></button>
+                            @if (in_array(4, $permissions))
+                                <button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="custom-tooltip"
+                                data-bs-title="Nuevo módulo" onclick="openModal()"><i class="fa-solid fa-circle-plus"></i></button>
+                            @endif
                         </th>
                     </tr>
                 </thead>
@@ -38,6 +40,8 @@
 @section('scripts')
     <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script>
+        var permissions = @json($permissions);
+
         $(document).ready(()=> {
             tableModules();
         });
@@ -78,62 +82,6 @@
                             return `<b>${row.status == 1 ? 'Activo' : 'Inactivo'}</b>`;
                         }
                     },
-                    // { 
-                    //     orderable: false,
-                    //     className: "text-center",
-                    //     render: (data, type, row, meta) => {
-                    //         const formateador = new Intl.NumberFormat("en", { style: "currency", "currency": "MXN" });
-                    //         return `<span>${formateador.format(row.importe).substring(2)}</span>`;
-                    //     }
-                    // },
-                    // { data: 'banco.banco', name: 'bancos.banco', orderable: false },
-                    // { 
-                    //     orderable: false,
-                    //     className: "text-center",
-                    //     render: (data, type, row, meta) => {
-                    //         var fecha = fechaEs(row.fecha_creacion, 1, '/', 1);
-                    //         return `<span>${fecha}</span>`;
-                    //     }
-                    // },
-                    // {
-                    //     orderable: false,
-                    //     className: "text-center",
-                    //     width: '15%',
-                    //     render: (data, type, row, meta) => {
-                    //         if (row.folio_unico != null && row.folio_unico != 0 && row.folio_unico != '') {
-                    //             return `
-                    //                 <div id="divEC${row.id}">
-                    //                     <span>${row.folio_unico}</span>
-                    //                     <input type="hidden" id="estado_cuenta${row.id}" value="${row.folio_unico}">
-                    //                 </div>
-                    //             `;
-                    //         }
-                    //         return `
-                    //             <div id="divEC${row.id}">
-                    //                 <input class="form-control form-control-sm" type="text" id="buscadorEC${row.id}" placeholder="Puede buscar por importe" onkeyup="buscaFolio(${row.id}, this.value, ${row.sociedad.idempresa}, '${row.banco.banco}')">
-                    //                 <div class="bg-white border divBuscador hidden" style="width: 550px; position: absolute;" id="divBuscador${row.id}">
-                                    
-                    //                 </div>
-                    //             </div>
-                    //         `;
-                    //     }
-                    // },
-                    // { 
-                    //     orderable: false,
-                    //     className: "text-center",
-                    //     render: (data, type, row, meta) => {
-                    //         var color = 'warning';
-                    //         switch (row.status.nombre) {
-                    //             case 'Aplicado':
-                    //                 color = 'success';
-                    //             break;
-                    //             case 'Rechazado':
-                    //                 color = 'danger';
-                    //             break;
-                    //         }
-                    //         return `<span class="badge badge-${color}">${row.status.nombre}</span>`;
-                    //     }
-                    // },
                     {
                         orderable: false,
                         className: "text-center",
@@ -142,8 +90,12 @@
                             var data = JSON.stringify(row);
                             data = data.replace(/['"]+/g, "'");
                             var buttons = `<div class="btn-group">`;
-                                buttons += `<button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar módulo" onclick="openModal(${data})"><i class="fa-solid fa-pen"></i></button>`;
-                                buttons += `<button class="btn btn-danger btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Desactivar módulo"><i class="fa-solid fa-eye"></i></button>`;
+                                if (permissions.includes(6)) {
+                                    buttons += `<button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar módulo" onclick="openModal(${data})"><i class="fa-solid fa-pen"></i></button>`;
+                                }
+                                if (permissions.includes(7)) {
+                                    buttons += `<button class="btn btn-danger btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Desactivar módulo"><i class="fa-solid fa-eye"></i></button>`;
+                                }
                             buttons += '</div>';
                             return buttons;
                         }

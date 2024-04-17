@@ -6,28 +6,36 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Module;
+use App\Models\Permission;
 use App\Models\User;
 use App\Traits\Modules;
 
 class UserController extends Controller
 {
     public function users() {
-        $module = Module::with(['dad'])->where('id', 3)
-        ->whereHas('users', function($query) {
-            $query->where('user_id', auth()->user()->id);
-        })
-        ->first();
+        $module = Modules::module(3);
         if (empty($module)) {
             return redirect('dashboard');
         }
+
+        $permissions = Permission::where('module_id', $module->id)->whereHas('users', function($query) {
+            $query->where('user_id', auth()->user()->id);
+        })->get();
+        $permissionsUser = [];
+        foreach ($permissions as $key => $p) {
+            $permissionsUser[] = $p->id;
+        }
         return view('configuration.users')->with([
             'modulo' => $module,
-            'menu' => Modules::modulesMenu()
+            'menu' => Modules::modulesMenu(),
+            'permissions' => $permissionsUser
         ]);
     }
 
     public function getUsers(Request $request) {
-        return DataTables::make(User::with(['modules'])->whereNotIn('id', [1])->select('id', 'name', 'user'))->toJson();
+        return DataTables::make(User::with(['modules', 'permissions'])
+        // ->whereNotIn('id', [1])
+        ->select('id', 'name', 'user'))->toJson();
     }
 
     public function createModifyUser(Request $request) {
