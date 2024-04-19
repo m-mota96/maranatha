@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 use App\Models\Module;
+use Illuminate\Support\Facades\DB;
 
 trait Modules {
 
@@ -39,6 +40,11 @@ trait Modules {
             'submodules.submodules.dad',
             'submodules.submodules.permissions'
         ])->where('status', 1)->where('module_id', null)->get();
+        return $modules;
+    }
+
+    public static function modulesNewMenu() {
+        $modules = Module::where('module_id', null)->orWhereRaw('(module_id IS NOT NULL AND target IS NULL)')->orderBy('name')->get();
         return $modules;
     }
 }

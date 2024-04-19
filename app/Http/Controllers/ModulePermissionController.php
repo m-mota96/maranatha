@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Module;
 use App\Models\Permission;
 use App\Models\User;
 use App\Traits\Modules;
+use App\Traits\Permissions;
 
 class ModulePermissionController extends Controller
 {
@@ -16,17 +16,10 @@ class ModulePermissionController extends Controller
             return redirect('dashboard');
         }
 
-        $permissions = Permission::where('module_id', $module->id)->whereHas('users', function($query) {
-            $query->where('user_id', auth()->user()->id);
-        })->get();
-        $permissionsUser = [];
-        foreach ($permissions as $key => $p) {
-            $permissionsUser[] = $p->id;
-        }
         return view('configuration.modulesPermissions')->with([
             'modulo' => $module,
             'menu' => Modules::modulesMenu(),
-            'permissions' => $permissionsUser
+            'permissions' => Permissions::permissionsUser($module->id)
         ]);
     }
 

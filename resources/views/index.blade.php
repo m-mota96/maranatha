@@ -118,6 +118,7 @@
             color: #464E5F !important;
         }
         table {
+            --bs-table-bg: unset !important;
             --bs-table-striped-bg: #f9f9f9 !important;
         }
 
@@ -184,6 +185,20 @@
         .badge {
             font-size: 0.7rem !important;
         }
+        .fs-normal {
+            font-size: 1rem;
+        }
+        .bg-danger {
+            background-color: #fdc0bd !important;
+        }
+        .bg-success {
+            background-color: #d1ffd7 !important;
+        }
+        .my-dropzone {
+            height: 50px !important;
+            border: 3px #79afff dashed;
+            cursor: pointer;
+        }
     </style>
     @yield('heads')
 </head>
@@ -216,6 +231,7 @@
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
     {{-- <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script> --}}
     <script src="{{asset('js/sweetalert2.js')}}"></script>
+    <script src="{{asset('js/dateEs.js')}}"></script>
     @yield('scripts')
     <script>
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')

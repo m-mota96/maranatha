@@ -3,6 +3,8 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ModulePermissionController;
+use App\Http\Controllers\PositionController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPermissionController;
 use App\Http\Controllers\ProfileController;
@@ -22,7 +24,8 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/configuracion_usuarios', [UserController::class, 'users'])->name('configuracion_usuarios');
     Route::get('/configuracion_permisos_usuarios', [UserPermissionController::class, 'usersPermissions'])->name('configuracion_permisos_usuarios');
     Route::get('/configuracion_permisos_modulos', [ModulePermissionController::class, 'modulesPermissions'])->name('configuracion_permisos_modulos');
-    Route::get('/operacion_staff_staff', [ModulePermissionController::class, 'modulesPermissions'])->name('operacion_staff_staff');
+    Route::get('/organizacion_staff_staff', [StaffController::class, 'staff'])->name('organizacion_staff_staff');
+    Route::get('/organizacion_staff_puestos', [PositionController::class, 'positions'])->name('organizacion_staff_puestos');
 });
 
 
@@ -36,9 +39,15 @@ require __DIR__.'/auth.php';
 
 
 Route::get('getModules', [ModuleController::class, 'getModules']);
-Route::post('createModifyModule', [ModuleController::class, 'createModifyModule']);
 Route::get('getUsers', [UserController::class, 'getUsers']);
+Route::get('getPositions', [PositionController::class, 'getPositions']);
+Route::get('getStaff', [StaffController::class, 'getStaff']);
+
+Route::post('createModifyModule', [ModuleController::class, 'createModifyModule']);
 Route::post('createModifyUser', [UserController::class, 'createModifyUser']);
 Route::post('updateUsersPermissions', [UserPermissionController::class, 'updateUsersPermissions']);
 Route::post('updateModulesPermissions', [ModulePermissionController::class, 'updateModulesPermissions']);
 Route::post('deletePermissionUser', [ModulePermissionController::class, 'deletePermissionUser']);
+Route::post('createModifyPosition', [PositionController::class, 'createModifyPosition']);
+Route::post('createModifyStaff', [StaffController::class, 'createModifyStaff']);
+Route::post('updateSchedulesStaff', [StaffController::class, 'updateSchedulesStaff']);

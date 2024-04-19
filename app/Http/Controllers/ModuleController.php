@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use App\Models\Module;
-use App\Models\Permission;
 use App\Traits\Modules;
+use App\Traits\Permissions;
 
 class ModuleController extends Controller
 {
@@ -16,17 +16,11 @@ class ModuleController extends Controller
             return redirect('dashboard');
         }
 
-        $permissions = Permission::where('module_id', $module->id)->whereHas('users', function($query) {
-            $query->where('user_id', auth()->user()->id);
-        })->get();
-        $permissionsUser = [];
-        foreach ($permissions as $key => $p) {
-            $permissionsUser[] = $p->id;
-        }
         return view('configuration.modules')->with([
             'modulo' => $module,
             'menu' => Modules::modulesMenu(),
-            'permissions' => $permissionsUser
+            'permissions' => Permissions::permissionsUser($module->id),
+            'modulesNewMenu' => Modules::modulesNewMenu()
         ]);
     }
 

@@ -29,4 +29,9 @@ trait DateFormatEs {
         $mes = ($abr == false) ? $meses[intval($mes) - 1] : $mesesCortos[intval($mes) - 1];
         return $mes;
     }
+
+    public static function days() {
+        $days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+        return $days;
+    }
 }

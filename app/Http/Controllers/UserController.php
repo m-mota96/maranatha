@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-use App\Models\Module;
-use App\Models\Permission;
 use App\Models\User;
 use App\Traits\Modules;
+use App\Traits\Permissions;
 
 class UserController extends Controller
 {
@@ -17,18 +16,11 @@ class UserController extends Controller
         if (empty($module)) {
             return redirect('dashboard');
         }
-
-        $permissions = Permission::where('module_id', $module->id)->whereHas('users', function($query) {
-            $query->where('user_id', auth()->user()->id);
-        })->get();
-        $permissionsUser = [];
-        foreach ($permissions as $key => $p) {
-            $permissionsUser[] = $p->id;
-        }
+        
         return view('configuration.users')->with([
             'modulo' => $module,
             'menu' => Modules::modulesMenu(),
-            'permissions' => $permissionsUser
+            'permissions' => Permissions::permissionsUser($module->id)
         ]);
     }
 
@@ -66,8 +58,8 @@ class UserController extends Controller
                 'password' => Hash::make(trim($request->password)),
             ]);
         } else {
-            // $user = Module::where('id', $request->userId)->first();
             $txt = 'modifico';
+            $user = User::where('id', $request->userId)->first();
             $user->name     = trim($request->nameUser);
             $user->user     = trim($request->user);
             if (!empty($request->password)) {

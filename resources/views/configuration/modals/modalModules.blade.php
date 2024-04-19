@@ -14,7 +14,7 @@
                         <select class="form-control form-control-sm mb-3" name="dad" id="dad" required>
                             <option value="" selected disabled>Elija una opción</option>
                             <option value="0">Nuevo módulo</option>
-                            @foreach ($menu as $m)
+                            @foreach ($modulesNewMenu as $m)
                                 <option value="{{$m->id}}">{{$m->name}}</option>
                             @endforeach
                         </select>
