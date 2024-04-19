@@ -38,6 +38,11 @@ class ModuleUserSeeder extends Seeder
             'user_id' => 1
         ];
 
+        $module_user[5] = [
+            'module_id' => 6,
+            'user_id' => 1
+        ];
+
         DB::table('module_user')->insert($module_user);
     }
 }

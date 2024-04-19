@@ -23,12 +23,15 @@
             </table>
         </div>
     </div>
-    @include('configuration.modals.modalModulesPermissions')
+    @if (in_array(9, $permissions))
+        @include('configuration.modals.modalModulesPermissions')
+    @endif
 @endsection
 
 @section('scripts')
     <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script>
+        var permissions = @json($permissions);
 
         $(document).ready(()=> {
             tableModules();
@@ -69,11 +72,12 @@
                         className: "text-center",
                         width: '8%',
                         render: (data, type, row, meta) => {
-                            var permissions = JSON.stringify(row.permissions);
-                            permissions = permissions.replace(/['"]+/g, "'");
+                            var permissionsUser = JSON.stringify(row.permissions);
+                            permissionsUser = permissionsUser.replace(/['"]+/g, "'");
                             var buttons = `<div class="btn-group">`;
-                                // buttons += `<button class="btn btn-primary btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Agregar permisos" onclick="openModal(${row.id})"><i class="fa-solid fa-plus"></i></button>`;
-                                buttons += `<button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar permisos" onclick="openModal(${row.id}, '${row.name}', ${permissions})"><i class="fa-solid fa-pen"></i></button>`;
+                                if (permissions.includes(9)) {
+                                    buttons += `<button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar permisos" onclick="openModal(${row.id}, '${row.name}', ${permissionsUser})"><i class="fa-solid fa-pen"></i></button>`;
+                                }
                             buttons += '</div>';
                             return buttons;
                         }
@@ -89,11 +93,11 @@
             });
         }
 
-        function openModal(moduleId, moduleName, permissions) {
+        function openModal(moduleId, moduleName, permissionsUser) {
             var html = '';
             $('#modalModulesPermissions #moduleId').val(moduleId);
             $('#modalModulesPermissions #moduleName').val(moduleName);
-            permissions.forEach((p, i) => {
+            permissionsUser.forEach((p, i) => {
                 html += `
                     <tr class="tr" id="tr${i}">
                         <td>

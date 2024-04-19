@@ -58,6 +58,15 @@ class ModuleSeeder extends Seeder
             'updated_at' => date('Y-m-d H:i:s'),
         ];
 
+        $modules[5] = [
+            'module_id' => 4,
+            'name' => 'Permisos de modulos',
+            'target' => 'configuracion_permisos_modulos',
+            'icon' => null,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
         Module::insert($modules);
     }
 }

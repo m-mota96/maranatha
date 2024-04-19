@@ -22,6 +22,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/configuracion_usuarios', [UserController::class, 'users'])->name('configuracion_usuarios');
     Route::get('/configuracion_permisos_usuarios', [UserPermissionController::class, 'usersPermissions'])->name('configuracion_permisos_usuarios');
     Route::get('/configuracion_permisos_modulos', [ModulePermissionController::class, 'modulesPermissions'])->name('configuracion_permisos_modulos');
+    Route::get('/operacion_staff_staff', [ModulePermissionController::class, 'modulesPermissions'])->name('operacion_staff_staff');
 });
 
 

@@ -15,9 +15,18 @@ class ModulePermissionController extends Controller
         if (empty($module)) {
             return redirect('dashboard');
         }
+
+        $permissions = Permission::where('module_id', $module->id)->whereHas('users', function($query) {
+            $query->where('user_id', auth()->user()->id);
+        })->get();
+        $permissionsUser = [];
+        foreach ($permissions as $key => $p) {
+            $permissionsUser[] = $p->id;
+        }
         return view('configuration.modulesPermissions')->with([
             'modulo' => $module,
-            'menu' => Modules::modulesMenu()
+            'menu' => Modules::modulesMenu(),
+            'permissions' => $permissionsUser
         ]);
     }
 

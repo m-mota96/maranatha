@@ -15,7 +15,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-info" id="btnSave">Actualizar permisos</button>
+                @if (in_array(8, $permissions))
+                    <button type="submit" class="btn btn-info" id="btnSave">Actualizar permisos</button>
+                @endif
             </div>
         </form>
     </div>

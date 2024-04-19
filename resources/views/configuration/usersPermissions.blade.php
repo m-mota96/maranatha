@@ -30,7 +30,7 @@
     <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script>
         const allModules = @json($allModules);
-        // console.log(modules);
+        var permissions  = @json($permissions);
 
         $(document).ready(()=> {
             tableUsers();
@@ -62,10 +62,12 @@
                         render: (data, type, row, meta) => {
                             var modules = JSON.stringify(row.modules);
                             modules = modules.replace(/['"]+/g, "'");
-                            var permissions = JSON.stringify(row.permissions);
-                            permissions = permissions.replace(/['"]+/g, "'");
+                            var permissionsUser = JSON.stringify(row.permissions);
+                            permissionsUser = permissionsUser.replace(/['"]+/g, "'");
                             var buttons = `<div class="btn-group">`;
-                                buttons += `<button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar permisos" onclick="openModal(${row.id}, ${modules}, ${permissions})"><i class="fa-solid fa-pen"></i></button>`;
+                                if (permissions.includes(7)) {
+                                    buttons += `<button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar permisos" onclick="openModal(${row.id}, ${modules}, ${permissionsUser})"><i class="fa-solid fa-pen"></i></button>`;
+                                }
                             buttons += '</div>';
                             return buttons;
                         }
@@ -81,7 +83,7 @@
             });
         }
 
-        function openModal(userId, modules, permissions) {
+        function openModal(userId, modules, permissionsUser) {
             $('#modalUsersPermissions #userId').val(userId);
             var checked = '', checked2 = '', cont = 0, cont2 = 0;
             var html = '';
@@ -114,7 +116,7 @@
                                 html += `<ul>`;
                                 sm.permissions.forEach(p => {
                                     checked2 = '';
-                                    permissions.forEach(per => {
+                                    permissionsUser.forEach(per => {
                                         if (per.id == p.id) {
                                             checked2 = 'checked';
                                         }
@@ -140,9 +142,10 @@
                                             <input class="form-check-input pointer me-1 grandson-${m.id} son-${sm.id}" type="checkbox" name="modulesActive[${cont}]" id="module-${sm2.id}" value="${sm2.id}" ${checked} onchange="checkUncheckDads(${m.id}, ${sm.id}, ${sm2.id})">
                                             <label class="form-check-label pointer mb-1 selection-disable bold text-success" for="module-${sm2.id}">Módulo - ${sm2.name}</label><br>
                                         `;
+                                        html += `<ul>`;
                                         sm2.permissions.forEach(p => {
                                             checked2 = '';
-                                            permissions.forEach(per => {
+                                            permissionsUser.forEach(per => {
                                                 if (per.id == p.id) {
                                                     checked2 = 'checked';
                                                 }
@@ -153,6 +156,7 @@
                                             `;
                                             cont2++;
                                         });
+                                        html += `</ul>`;
                                     });
                                 html += `</ul>`;
                             });

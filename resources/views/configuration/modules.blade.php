@@ -20,7 +20,7 @@
                         <th>Descripción</th>
                         <th>Estatus</th>
                         <th>
-                            @if (in_array(4, $permissions))
+                            @if (in_array(1, $permissions))
                                 <button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top"
                                 data-bs-custom-class="custom-tooltip"
                                 data-bs-title="Nuevo módulo" onclick="openModal()"><i class="fa-solid fa-circle-plus"></i></button>
@@ -34,7 +34,9 @@
             </table>
         </div>
     </div>
-    @include('configuration.modals.modalModules')
+    @if (in_array(1, $permissions) || in_array(2, $permissions))
+        @include('configuration.modals.modalModules')
+    @endif
 @endsection
 
 @section('scripts')
@@ -90,10 +92,10 @@
                             var data = JSON.stringify(row);
                             data = data.replace(/['"]+/g, "'");
                             var buttons = `<div class="btn-group">`;
-                                if (permissions.includes(6)) {
+                                if (permissions.includes(2)) {
                                     buttons += `<button class="btn btn-success btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar módulo" onclick="openModal(${data})"><i class="fa-solid fa-pen"></i></button>`;
                                 }
-                                if (permissions.includes(7)) {
+                                if (permissions.includes(3)) {
                                     buttons += `<button class="btn btn-danger btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Desactivar módulo"><i class="fa-solid fa-eye"></i></button>`;
                                 }
                             buttons += '</div>';
