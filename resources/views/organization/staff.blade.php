@@ -40,6 +40,7 @@
         @include('organization.modals.modalStaff')
     {{-- @endif --}}
         @include('organization.modals.modalSchedulesStaff')
+        @include('organization.modals.modalImageProfile')
 @endsection
 
 @section('scripts')
@@ -50,7 +51,7 @@
 
         $(document).ready(()=> {
             tableStaff();
-            $("#modalStaff #imgProfile").dropzone({
+            $("#modalImageProfile #imgProfile").dropzone({
                 url: $('#URL').val()+'createModifyStaff',
                 autoProcessQueue: false,
 
@@ -171,6 +172,10 @@
                 $('#modalStaff #btnSave').text('Guardar cambios');
             }
             $('#modalStaff').modal('show');
+        }
+
+        function openModalImageProfile() {
+            $('#modalImageProfile').modal('show');
         }
 
         $('#modalSchedulesStaffForm').submit((e)=> {

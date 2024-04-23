@@ -86,9 +86,9 @@
         .relative {
             position: relative;
         }
-        .content div {
+        /* .content div {
             height: fit-content !important;
-        }
+        } */
         .btn-success {
             color: #ffffff !important;
             background-color: #1BC5BD !important;
@@ -195,9 +195,24 @@
             background-color: #d1ffd7 !important;
         }
         .my-dropzone {
-            height: 50px !important;
+            min-height: 150px !important;
             border: 3px #79afff dashed;
             cursor: pointer;
+        }
+        .pencil-edit {
+            top: 20px;
+            position: absolute;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .dz-image img {
+            border-radius: 50% !important;
+        }
+        .dz-success-mark {
+            display: none;
+        }
+        .dz-error-mark {
+            display: none;
         }
     </style>
     @yield('heads')

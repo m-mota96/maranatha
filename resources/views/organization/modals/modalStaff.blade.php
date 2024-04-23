@@ -11,12 +11,15 @@
                 <div class="row">
                     <div class="col-xl-4 mb-3 text-center">
                         <img class="w-50 rounded-circle" src="{{asset('general/user.jpg')}}" alt="Temazcal Marantha">
+                        <i class="fa-solid fa-pen pencil-edit" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar foto de perfil" onclick="openModalImageProfile()"></i>
                     </div>
-                    <div class="col-xl-8 mb-3">
-                        <div class="row my-dropzone" id="imgProfile">
-
-                        </div>
+                    <div class="col-xl-4 mb-3">
+                        {{-- <label>Cambiar foto de perfil:</label>
+                        <div class="col-xl-12 my-dropzone text-center pt-2" id="imgProfile">
+                            <div class="dz-message mt-5" data-dz-message><h6 class="text-secondary">Arrastre la imagen o haga click en el recuadro</h6></div>
+                        </div> --}}
                     </div>
+                    <div class="col-xl-4"></div>
                     <div class="col-xl-4">
                         <input class="form-control" type="hidden" name="staffId" id="staffId">
                         <label for="staffName">Nombre(s):</label>
