@@ -9,18 +9,11 @@
             <div class="modal-body">
                 @csrf
                 <div class="row">
-                    <div class="col-xl-4 mb-3 text-center">
-                        <img class="w-50 rounded-circle" src="{{asset('general/user.jpg')}}" alt="Temazcal Marantha">
+                    <div class="col-xl-12 mb-4 text-center" id="divImgProfile">
+                        <img class="w-15 rounded-circle" src="{{asset('general/user.jpg')}}" alt="Temazcal Marantha" id="imgProfileStaff">
                         <i class="fa-solid fa-pen pencil-edit" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Editar foto de perfil" onclick="openModalImageProfile()"></i>
                     </div>
-                    <div class="col-xl-4 mb-3">
-                        {{-- <label>Cambiar foto de perfil:</label>
-                        <div class="col-xl-12 my-dropzone text-center pt-2" id="imgProfile">
-                            <div class="dz-message mt-5" data-dz-message><h6 class="text-secondary">Arrastre la imagen o haga click en el recuadro</h6></div>
-                        </div> --}}
-                    </div>
-                    <div class="col-xl-4"></div>
-                    <div class="col-xl-4">
+                    <div class="col-xl-4" id="divStaffName">
                         <input class="form-control" type="hidden" name="staffId" id="staffId">
                         <label for="staffName">Nombre(s):</label>
                         <input class="form-control form-control-sm mb-3" type="text" name="staffName" id="staffName" autocomplete="off" required>
@@ -65,6 +58,15 @@
                     <div class="col-xl-4">
                         <label for="commission">Comisión:</label>
                         <input class="form-control form-control-sm mb-3" type="text" name="commission" id="commission" autocomplete="off">
+                    </div>
+                    <div class="col-xl-12">
+                    <label class="mb-1">Servicios que ofrece:</label>
+                    <div class="col-xl-12">
+                        @foreach ($services as $key => $s)
+                            <input class="form-check-input fs-normal pointer me-1 mb-2 services" type="checkbox" name="service[{{$key}}]" id="service-{{$s->id}}" value="{{$s->id}}">
+                            <label class="pointer selection-disable me-3 mb-2 bold" for="service-{{$s->id}}">{{$s->name}}</label>
+                        @endforeach
+                    </div>
                     </div>
                 </div>
             </div>

@@ -12,6 +12,9 @@
                     <div class="col-xl-12 my-dropzone text-center pt-2" id="imgProfile">
                         <div class="dz-message mt-5" data-dz-message><h6 class="text-secondary">Arrastre la imagen o haga click en el recuadro</h6></div>
                     </div>
+                    <div class="col-xl-12 mt-3 text-center hidden" id="btnDeletePreview">
+                        <button class="btn btn-danger btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="Eliminar imagen" onclick="deletePreview()"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

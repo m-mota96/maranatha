@@ -20,4 +20,8 @@ class Staff extends Model
     public function schedules() {
         return $this->hasMany(StaffSchedule::class);
     }
+
+    public function services() {
+        return $this->belongsToMany(Service::class)->where('status', 1)->orderBy('name');
+    }
 }

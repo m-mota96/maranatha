@@ -3,7 +3,10 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ModulePermissionController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPermissionController;
@@ -26,6 +29,9 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/configuracion_permisos_modulos', [ModulePermissionController::class, 'modulesPermissions'])->name('configuracion_permisos_modulos');
     Route::get('/organizacion_staff_staff', [StaffController::class, 'staff'])->name('organizacion_staff_staff');
     Route::get('/organizacion_staff_puestos', [PositionController::class, 'positions'])->name('organizacion_staff_puestos');
+    Route::get('/operacion_servicios', [ServiceController::class, 'services'])->name('operacion_servicios');
+    Route::get('/operacion_productos', [ProductController::class, 'products'])->name('operacion_productos');
+    Route::get('/operacion_paquetes', [PackageController::class, 'packages'])->name('operacion_paquetes');
 });
 
 
@@ -42,6 +48,7 @@ Route::get('getModules', [ModuleController::class, 'getModules']);
 Route::get('getUsers', [UserController::class, 'getUsers']);
 Route::get('getPositions', [PositionController::class, 'getPositions']);
 Route::get('getStaff', [StaffController::class, 'getStaff']);
+Route::get('getServices', [ServiceController::class, 'getServices']);
 
 Route::post('createModifyModule', [ModuleController::class, 'createModifyModule']);
 Route::post('createModifyUser', [UserController::class, 'createModifyUser']);
@@ -51,3 +58,5 @@ Route::post('deletePermissionUser', [ModulePermissionController::class, 'deleteP
 Route::post('createModifyPosition', [PositionController::class, 'createModifyPosition']);
 Route::post('createModifyStaff', [StaffController::class, 'createModifyStaff']);
 Route::post('updateSchedulesStaff', [StaffController::class, 'updateSchedulesStaff']);
+Route::post('updateImgProfileStaff', [StaffController::class, 'updateImgProfileStaff']);
+Route::post('createModifyService', [ServiceController::class, 'createModifyService']);

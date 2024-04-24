@@ -48,13 +48,67 @@
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     <script>
         var permissions = @json($permissions);
+        var myDropzone = '';
 
         $(document).ready(()=> {
             tableStaff();
             $("#modalImageProfile #imgProfile").dropzone({
-                url: $('#URL').val()+'createModifyStaff',
+                url: $('#URL').val()+'updateImgProfileStaff',
                 autoProcessQueue: false,
+                maxFilesize: '1000000',
+                acceptedFiles: 'image/jpeg, image/png',
+                maxFiles: 1,
+                init: function() {
+                    myDropzone = this;
+                    this.on("maxfilesexceeded", file => {
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Solo puede cargar una imagen a la ves.'
+                        });
+                        this.removeFile(file);
+                        return false;
+                    });
+                    this.on("addedfile", file => {
+                        if (file.size > 1000000) {
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'La imagen debe pesar menos de 1 MB.'
+                            });
+                            this.removeAllFiles();
+                            return false;
+                        }
+                        if (file.type != 'image/jpeg' && file.type != 'image/png') {
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'Solo se aceptan imagenes con formato JPG o PNG.'
+                            });
+                            this.removeAllFiles();
+                            return false;
+                        }
+                        $('#modalImageProfile #btnDeletePreview').removeClass('hidden');
+                    });
+                    this.on('sending', function(file, xhr, formData){
+                        formData.append('_token', $('#_token').val());
+                        formData.append('staffId', $('#modalStaff #staffId').val());
+                    });
+                    this.on("success", function(file, request) {
+                        if (request.error) {
+                            Swal.fire({
+                                icon: 'error',
+                                text: request.msj
+                            });
+                            return false;
+                        }
 
+                        tableStaff();
+                        $('#modalImageProfile').modal('hide');
+                        $('#modalStaff #imgProfileStaff').attr('src', $('#URL').val()+'profileStaff/'+request.msj);
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Laimagen se actualizo correctamente.'
+                        });
+                    });
+                }
             });
         });
 
@@ -153,10 +207,22 @@
         }
 
         function openModal(data = null) {
+            $('#modalStaff .services').prop('checked', false);
+            $('#modalStaff #imgProfileStaff').attr('src', $('#URL').val()+'general/user.jpg');
             $('#modalStaff .form-control').val('');
             $('#modalStaff #modalStaffLabel').text('Crear staff');
+            $('#modalStaff #divImgProfile').addClass('hidden');
             $('#modalStaff #btnSave').text('Guardar');
             if (data != null) {
+                if (data.services.length > 0) {
+                    data.services.forEach(s => {
+                        $(`#modalStaff #service-${s.id}`).prop('checked', true);
+                    });
+                }
+                if (data.image_profile != null && data.image_profile != '') {
+                    $('#modalStaff #imgProfileStaff').attr('src', $('#URL').val()+'profileStaff/'+data.image_profile);
+                }
+                $('#modalStaff #divImgProfile').removeClass('hidden');
                 $('#modalStaff #staffId').val(data.id);
                 $('#modalStaff #position').val(data.position_id);
                 $('#modalStaff #staffName').val(data.name);
@@ -175,8 +241,20 @@
         }
 
         function openModalImageProfile() {
+            myDropzone.removeAllFiles();
+            $('#modalImageProfile #btnDeletePreview').addClass('hidden');
             $('#modalImageProfile').modal('show');
         }
+
+        function deletePreview() {
+            $('#modalImageProfile #btnDeletePreview').addClass('hidden');
+            myDropzone.removeAllFiles();
+        }
+
+        $('#modalImageProfileForm').submit((e)=> {
+            e.preventDefault();
+            myDropzone.processQueue();
+        });
 
         $('#modalSchedulesStaffForm').submit((e)=> {
             e.preventDefault();

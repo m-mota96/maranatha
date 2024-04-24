@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use App\Models\Position;
+use App\Models\Service;
 use App\Models\Staff;
 use App\Models\StaffSchedule;
 use App\Traits\DateFormatEs;
@@ -24,18 +25,19 @@ class StaffController extends Controller
             'menu' => Modules::modulesMenu(),
             'permissions' => Permissions::permissionsUser($module->id),
             'positions' => Position::where('status', 1)->get(),
-            'days' => DateFormatEs::days()
+            'days' => DateFormatEs::days(),
+            'services' => Service::where('status', 1)->whereNotIn('service_type_id', [2])->orderBy('name')->get()
         ]);
     }
 
     public function getStaff(Request $request) {
-        return DataTables::make(Staff::with(['position', 'schedules']))->toJson();
+        return DataTables::make(Staff::with(['position', 'schedules', 'services']))->toJson();
     }
 
     public function createModifyStaff(Request $request) {
         if (empty($request->staffId)) {
             $txt = 'guardo';
-            Staff::create([
+            $staff = Staff::create([
                 'position_id' => $request->position,
                 'name' => trim($request->staffName),
                 'first_name' => trim($request->firstName),
@@ -49,7 +51,7 @@ class StaffController extends Controller
             ]);
         } else {
             $txt = 'modifico';
-            $staff = Staff::where('id', $request->staffId)->first();
+            $staff = Staff::find($request->staffId);
             $staff->position_id = $request->position;
             $staff->name = trim($request->staffName);
             $staff->first_name = trim($request->firstName);
@@ -62,6 +64,10 @@ class StaffController extends Controller
             $staff->commission = !empty($request->commission) ? trim($request->commission) : null;
             $staff->save();
         }
+
+        $services = !empty($request->service) ? array_values($request->service) : [];
+        $staff->services()->sync($services);
+
         return response()->json([
             'error' => false,
             'msj'   => 'El staff se '.$txt.' correctamente'
@@ -86,6 +92,41 @@ class StaffController extends Controller
         return response()->json([
             'error' => false,
             'msj'   => 'Los horarios se actualizaron correctamente'
+        ], 200);
+    }
+
+    public function updateImgProfileStaff(Request $request) {
+        if (empty($request->file)) {
+            return response()->json([
+                'error' => true,
+                'msj'   => 'No cargo ninguna imagen.'
+            ], 200);
+        }
+
+        $file = $request->file;
+        $extension = $file->getClientOriginalExtension();
+        if ($extension != 'jpg' && $extension != 'png') {
+            return response()->json([
+                'error' => true,
+                'msj'   => 'Solo se aceptan imagenes con formato JPG o PNG.'
+            ], 200);
+        }
+
+        $nameImage = uniqid() . '.' . $extension;
+        $file->move('profileStaff', $nameImage);
+
+        $staff = Staff::find($request->staffId);
+        if (!empty($staff->image_profile)) {
+            if (file_exists('profileStaff/'.$staff->image_profile)) {
+                unlink('profileStaff/'.$staff->image_profile);
+            }
+        }
+        $staff->image_profile = $nameImage;
+        $staff->save();
+
+        return response()->json([
+            'error' => false,
+            'msj'   => $nameImage
         ], 200);
     }
 }

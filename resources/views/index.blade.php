@@ -214,6 +214,51 @@
         .dz-error-mark {
             display: none;
         }
+        .w-10 {
+            width: 10%;
+        }
+        .w-15 {
+            width: 15%;
+        }
+        .w-20 {
+            width: 20%;
+        }
+        .card-warning {
+            color: #FFA800;
+            background-color: #FFF4DE;
+            border-color: transparent;
+            cursor: pointer;
+            border-radius: 15px;
+        }
+        .card-warning:hover {
+            background-color: #FFA800;
+            color: white;
+        }
+        .card-danger {
+            color: #F64E60;
+            background-color: #FFE2E5;
+            border-color: transparent;
+            cursor: pointer;
+            border-radius: 15px;
+        }
+        .card-danger:hover {
+            background-color: #F64E60;
+            color: white;
+        }
+        .card-info {
+            color: #8950FC;
+            background-color: #EEE5FF;
+            border-color: transparent;
+            cursor: pointer;
+            border-radius: 15px;
+        }
+        .card-info:hover {
+            background-color: #8950FC;
+            color: white;
+        }
+        .modal-xxl {
+            --bs-modal-width: 95%;
+        }
     </style>
     @yield('heads')
 </head>
