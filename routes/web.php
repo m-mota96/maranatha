@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ModulePermissionController;
@@ -49,6 +50,7 @@ Route::get('getUsers', [UserController::class, 'getUsers']);
 Route::get('getPositions', [PositionController::class, 'getPositions']);
 Route::get('getStaff', [StaffController::class, 'getStaff']);
 Route::get('getServices', [ServiceController::class, 'getServices']);
+Route::get('getCustomers', [CustomerController::class, 'getCustomers']);
 
 Route::post('createModifyModule', [ModuleController::class, 'createModifyModule']);
 Route::post('createModifyUser', [UserController::class, 'createModifyUser']);
@@ -60,3 +62,4 @@ Route::post('createModifyStaff', [StaffController::class, 'createModifyStaff']);
 Route::post('updateSchedulesStaff', [StaffController::class, 'updateSchedulesStaff']);
 Route::post('updateImgProfileStaff', [StaffController::class, 'updateImgProfileStaff']);
 Route::post('createModifyService', [ServiceController::class, 'createModifyService']);
+Route::post('createModifyCustomers', [CustomerController::class, 'createModifyCustomers']);

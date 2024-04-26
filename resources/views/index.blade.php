@@ -297,6 +297,14 @@
         .bg-gray {
             background-color: rgb(243 243 243) !important;
         }
+        .ui-autocomplete {
+            z-index: 9999 !important;
+        }
+        .shadow {
+            box-shadow: 0px 0px 9px 2px rgba(0,0,0,0.5);
+            -webkit-box-shadow: 0px 0px 9px 2px rgba(0,0,0,0.5);
+            -moz-box-shadow: 0px 0px 9px 2px rgba(0,0,0,0.5);
+        }
     </style>
     @yield('heads')
 </head>

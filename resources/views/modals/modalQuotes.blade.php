@@ -11,29 +11,36 @@
                     <div class="col-xl-2">
                         <div class="row">
                             <div class="col-xl-12 mb-3">
-                                <label>Fecha de la cita:</label>
+                                <p class="relative mb-0">
+                                    <label class="bold" for="customer">Cliente:</label>
+                                    <i class="fa-solid fa-plus add-number selection-disable fs-small absolute right" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Nuevo cliente" onclick="openModalCustomers()"></i>
+                                </p>
+                                <input class="form-control form-control-sm ui-autocomplete-input" type="text" id="customer">
+                                <input class="form-control" type="hidden" id="customerId">
+                            </div>
+                            <div class="col-xl-12 mb-3">
+                                <label class="bold">Fecha de la cita:</label>
                                 <input class="form-control" type="hidden" id="dateQuote" value="">
                                 <div id='calendar'></div>
                             </div>
-                            <div class="col-xl-12 mb-3">
-                                <label for="horary">Hora:</label>
-                                <input class="form-control form-control-sm" type="time" id="horary">
-                            </div>
-                            <div class="col-xl-12 mb-3">
-                                <label for="customer">Cliente:</label>
-                                <input class="form-control form-control-sm" type="text" id="customer">
+                            <div class="col-xl-12 mb-3" id="divHorary">
+                                <label class="bold horary hidden" for="horary">Hora:</label>
+                                <input class="form-control form-control-sm horary hidden" type="time" id="horary">
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3">
-                        <label for="servicesTypes">Servicios:</label>
-                        <select class="form-control form-control-sm mb-2" id="servicesTypes" onchange="getServices(this.value)">
+                    <div class="col-xl-3" id="contentServices">
+                        <p class="relative mb-0">
+                            <label class="bold">Servicios:</label>
+                            <i class="fa-solid fa-plus add-number selection-disable fs-small absolute right" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Añadir servicios" onclick="addService()"></i>
+                        </p>
+                        <select class="form-control form-control-sm mb-2 serviceType" id="servicesTypes-0" onchange="getServices(this.value, 0)">
                             <option value="">Elija una opcion</option>
                             @foreach ($serviceTypes as $key => $s)
                                 <option value="{{$s->id}}">{{$s->name}}</option>
                             @endforeach
                         </select>
-                        <div class="col-xl-12" id="divServices">
+                        <div class="col-xl-12 mb-4 divServices" id="divServices-0">
 
                         </div>
                     </div>
@@ -44,7 +51,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-primary">Confirmar cita</button>
             </div>
         </div>
     </div>

@@ -4,6 +4,7 @@
 /public/hot
 /public/storage
 /public/profileStaff
+/public/jquery-ui-1.13.2
 /storage/*.key
 /vendor
 .env
