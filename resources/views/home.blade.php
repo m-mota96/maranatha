@@ -1,9 +1,7 @@
 @extends('index')
 @section('heads')
     <title>{{auth()->user()->name}} | Inicio</title>
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet"/> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-    {{-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"> --}}
 @endsection
 
 @section('content')
@@ -45,112 +43,98 @@
 @endsection
 
 @section('scripts')
-    {{-- <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script> --}}
-    {{-- <script src="{{asset('js/moment.min.js')}}"></script> --}}
-    {{-- <script src='http://fullcalendar.io/js/fullcalendar-3.4.0/fullcalendar.min.js'></script> --}}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-    {{-- <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.1/i18n/jquery.ui.datepicker-es.min.js" crossorigin="anonymous"></script> --}}
     <script>
-        var calendar = '';
+        const serviceTypes = @json($serviceTypes);
+
+        $.fn.datepicker.dates['es'] = {
+			days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+		    daysShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+		    daysMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+		    months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+		    monthsShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+		    today: 'Hoy',
+		    clear: 'Limpiar',
+		    format: 'dd/mm/yy',
+		    titleFormat: "MM yyyy", 
+		    weekStart: 1
+		};
 
         $(document).ready(()=> {
             $("#modalQuotes #calendar").datepicker({
-                language: "es",
-                todayHighlight:true,
-                daysOfWeekDisabled: "0",
-                daysOfWeekHighlighted: "0",
-                showDropdowns: true,
-                prevText: '<Ant',
-                nextText: 'Sig>',
-                currentText: 'Hoy',
-                // monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                // monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
-                // dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-                // dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
-                // dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+                language: 'es',
+                todayHighlight: true,
                 // datesDisabled: fechasInhabilitadas
+                onSelect: function (dateText, inst) {
+                    console.log(dateText);
+                    console.log(inst);
+                }
+            }).on('changeDate', function(e) {
+                $('#modalQuotes #dateQuote').val(e.format(0,"yyyy-mm-dd"));
             });
-            // var calendarEl = document.getElementById('calendar');
-            // calendar = new FullCalendar.Calendar(calendarEl, {
-            //     showNonCurrentDates: true,
-            //     locale: 'es',
-            //     selectable: true,
-            //     editable: true,
-            //     eventColor: 'red',
-            //     eventTextColor: '#fff',
-            //     height: 'auto',
-            //     buttonText: {
-            //         today: 'Hoy',
-            //     },
-            //     header:{
-            //         left:'Mes anterior',
-            //         center:'Hoy',
-            //         right:'Mes siguiente'
-            //     },
-            //     eventOverlap: false,
-            //     dateClick: function (info) {
-            //         // Obtiene la fecha seleccionada en el calendario
-            //         var fechaSeleccionada = info.dateStr;
-            //         // Actualiza el valor del campo de entrada con la fecha seleccionada
-            //         $("#fechaCita").val(fechaSeleccionada);
-            //     },
-            //     dayCellContent: function (info) {
-            //         info.dayNumberText = info.dayNumberText.replace(/^0+/,
-            //             ''); // Eliminar ceros a la izquierda
-            //         return {
-            //             html: '<span class="fc-day-number">' + info.dayNumberText + '</span>'
-            //         };
-            //     },
-            //     dayCellDidMount: function (info) {
-            //         var el = info.el;
-            //         var num = el.querySelector('.fc-day-number');
-            //         if (num) {
-            //             num.style.color = '#000'; // Cambiar color del número a negro
-            //         }
-            //         el.style.backgroundColor = '#fff'; // Cambiar fondo del día a blanco
-            //     },
-            //     dayHeaderContent: function (info) {
-            //         return {
-            //             html: "<span style='color: black'>" + info.text + "</span>"
-            //         };
-            //     },
-            // });
         });
 
-        function openModalQuotes() {
-            // $('#modalQuotes .fc-today-button').click();
-            $('#modalQuotes').modal('show');
-            // $('#calendar').fullCalendar({
-            //     header: {				
-            //         left: 'prev',
-            //         center: 'title',
-            //         right: 'next,today',			 
-            //     },
-            //     buttonText: {
-            //         today: 'Hoy',
-            //         prev: 'Mes anterior',
-            //         next: 'Mes aiguiente'
-            //     },
-            //     height: "auto",
-            //     // timeZone: "local",
-            //     timeZone: "America/Mexico_City",
-            //     initialView: "resourceTimeGridDay",
-            //     initialDate: "2024-04-24",
-            //     defaultDate: "2024-04-24",
-            //     monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-            //     monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-            //     dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
-            //     dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
-            //     dayClick: function(date, jsEvent, view) {
-            //         $("#fechaCita").val(date.format());
-            //     }
-		    // });
+        function getServices(serviceTypeId) {
+            if (serviceTypeId == '' || serviceTypeId == null) {
+                return false;
+            }
+
+            serviceTypes.forEach(s => {
+                if (s.id == parseInt(serviceTypeId)) {
+                    cerateDomServices(s.services);
+                }
+            });
         }
 
-        function prueba() {
-            // $('#modalQuotes .fc-today-button').click();
-            console.log('ENTRE');
+        function cerateDomServices(services) {
+            var html = '', bg = '';
+            services.forEach(s => {
+                bg = (bg != '') ? '' : 'bg-gray';
+                html += `
+                    <div class="col-xl-12 relative ${bg}" id="divService-${s.id}">
+                        <input class="form-check-input fs-normal pointer me-1" type="checkbox" id="service-${s.id}" value="${s.id}" onchange="verifyCheckUncheckService(${s.id})">
+                        <label class="pointer selection-disable bold mt-1" for="service-${s.id}">${s.name}</label>
+                        <span class="contentNumberService absolute right"></span>
+                    </div>
+                `;
+            });
+            $('#modalQuotes #divServices').html(html);
+        }
+
+        function createNumberService(serviceId) {
+            var html = `
+                <i class="fa-solid fa-minus add-number selection-disable fs-small" onclick="addRemoveNumber('remove', ${serviceId})"></i>
+                <span class="selection-disable fs-small bold numberServiceText">1</span>
+                <input class="numberServiceInput" type="hidden" value="1">
+                <i class="fa-solid fa-plus me-3 add-number selection-disable fs-small" onclick="addRemoveNumber('add', ${serviceId})"></i>
+            `;
+            return html;
+        }
+
+        function verifyCheckUncheckService(serviceId) {
+            $(`#modalQuotes #divService-${serviceId} .contentNumberService`).html('');
+            if ($(`#modalQuotes #service-${serviceId}`).is(':checked')) {
+                $(`#modalQuotes #divService-${serviceId} .contentNumberService`).html(createNumberService(serviceId));
+            }
+        }
+
+        function addRemoveNumber(action, serviceId) {
+            var number = parseInt($(`#modalQuotes #divService-${serviceId} .numberServiceInput`).val());
+            if (action == 'add') {
+                number = number + 1;
+            } else {
+                if (number > 1) {
+                    number = number - 1;
+                }
+            }
+            $(`#modalQuotes #divService-${serviceId} .numberServiceText`).text(number);
+            $(`#modalQuotes #divService-${serviceId} .numberServiceInput`).val(number);
+        }
+
+        function openModalQuotes() {
+            $('#modalQuotes .form-control').val('');
+            $('#modalQuotes #calendar .datepicker .day').removeClass('active');
+            $('#modalQuotes').modal('show');
         }
     </script>
 @endsection

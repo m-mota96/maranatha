@@ -9,12 +9,36 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xl-2">
-                        <label for="dateQuote">Cliente:</label>
-                        <input class="form-control form-control-sm mb-3" type="text" onkeyup="prueba()">
-                        <label for="dateQuote">Fecha de la cita:</label>
-                        {{-- <input class="form-control form-control-sm mb-3" type="date"> --}}
-                        <input type="text" id="fechaCita" value="{{date('Y-m-d')}}">
-                        <div id='calendar'></div>
+                        <div class="row">
+                            <div class="col-xl-12 mb-3">
+                                <label>Fecha de la cita:</label>
+                                <input class="form-control" type="hidden" id="dateQuote" value="">
+                                <div id='calendar'></div>
+                            </div>
+                            <div class="col-xl-12 mb-3">
+                                <label for="horary">Hora:</label>
+                                <input class="form-control form-control-sm" type="time" id="horary">
+                            </div>
+                            <div class="col-xl-12 mb-3">
+                                <label for="customer">Cliente:</label>
+                                <input class="form-control form-control-sm" type="text" id="customer">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <label for="servicesTypes">Servicios:</label>
+                        <select class="form-control form-control-sm mb-2" id="servicesTypes" onchange="getServices(this.value)">
+                            <option value="">Elija una opcion</option>
+                            @foreach ($serviceTypes as $key => $s)
+                                <option value="{{$s->id}}">{{$s->name}}</option>
+                            @endforeach
+                        </select>
+                        <div class="col-xl-12" id="divServices">
+
+                        </div>
+                    </div>
+                    <div class="col-xl-7">
+
                     </div>
                 </div>
             </div>

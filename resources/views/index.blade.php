@@ -86,6 +86,9 @@
         .relative {
             position: relative;
         }
+        .right {
+            right: 0;
+        }
         /* .content div {
             height: fit-content !important;
         } */
@@ -188,6 +191,9 @@
         .fs-normal {
             font-size: 1rem;
         }
+        .fs-small {
+            font-size: 0.8rem !important;
+        }
         .bg-danger {
             background-color: #fdc0bd !important;
         }
@@ -256,8 +262,40 @@
             background-color: #8950FC;
             color: white;
         }
+        .card-success {
+            color: #1BC5BD;
+            background-color: #C9F7F5;
+            border-color: transparent;
+            cursor: pointer;
+            border-radius: 15px;
+        }
+        .card-success:hover {
+            background-color: #1BC5BD;
+            color: white;
+        }
+        .add-number {
+            cursor: pointer;
+            padding: 3px;
+            background: #E1E9FF;
+            color: #6993FF;
+            border-radius: 0.3rem;
+        }
         .modal-xxl {
             --bs-modal-width: 95%;
+        }
+        .datepicker {
+            width: 100% !important;
+        }
+        .datepicker table {
+            width: 100% !important;
+        }
+        .datepicker table .active {
+            color: #F64E60 !important;
+            background-color: #FFE2E5 !important;
+            border-color: transparent !important;
+        }
+        .bg-gray {
+            background-color: rgb(243 243 243) !important;
         }
     </style>
     @yield('heads')
