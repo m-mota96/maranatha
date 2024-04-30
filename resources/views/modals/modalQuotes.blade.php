@@ -25,7 +25,7 @@
                             </div>
                             <div class="col-xl-12 mb-3" id="divHorary">
                                 <label class="bold horary hidden" for="horary">Hora:</label>
-                                <input class="form-control form-control-sm horary hidden" type="time" id="horary">
+                                <input class="form-control form-control-sm horary hidden" type="time" id="horary" onchange="searchStaff()">
                             </div>
                         </div>
                     </div>

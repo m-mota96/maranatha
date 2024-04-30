@@ -63,3 +63,4 @@ Route::post('updateSchedulesStaff', [StaffController::class, 'updateSchedulesSta
 Route::post('updateImgProfileStaff', [StaffController::class, 'updateImgProfileStaff']);
 Route::post('createModifyService', [ServiceController::class, 'createModifyService']);
 Route::post('createModifyCustomers', [CustomerController::class, 'createModifyCustomers']);
+Route::post('searchStaff', [HomeController::class, 'searchStaff']);

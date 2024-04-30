@@ -97,13 +97,36 @@
             }
         });
 
+        function searchStaff() {
+            $.ajax({
+                url: $('#URL').val()+'searchStaff',
+                method: 'POST',
+                data: {
+                    _token: $('#_token').val(),
+                    date: $('#modalQuotes #dateQuote').val(),
+                    horary: $('#modalQuotes #horary').val(),
+                    services: arrayServicesActive
+                },
+                success: (res)=> {
+
+                },
+                error: ()=> {
+                    Swal.fire({
+                        icon: 'error',
+                        html: 'Lo sentimos, ocurrio un error.<br>Por favor contacte a soporte.'
+                    });
+                }
+            });
+        }
+
+        var summaryServices = [], arrayServicesActive = [];
         function verifyDateAndServices() {
             var servicesActive = false, pos = 0;
-            var arrayServicesActive = [];
             $('#modalQuotes .servicesSelected').each(function(i, s) {
                 if ($(this).is(':checked')) {
                     servicesActive = true;
-                    arrayServicesActive[pos] = {
+                    arrayServicesActive[pos] = $(this).val();
+                    summaryServices[pos] = {
                         serviceId: parseInt($(this).val()),
                         serviceTime: $(this).attr('data-time'),
                         servicePrice: $(this).attr('data-price'),
@@ -115,7 +138,8 @@
             });
             
             if ($('#modalQuotes #dateQuote').val() != '' && servicesActive) {
-                console.log(arrayServicesActive);
+                // console.log(arrayServicesActive);
+                $('#modalQuotes #divHorary .horary').removeClass('hidden');
             }
         }
 
