@@ -45,7 +45,21 @@
                         </div>
                     </div>
                     <div class="col-xl-7">
+                        <table class="table table-striped w-100">
+                            <thead>
+                                <tr>
+                                    <th class="w-25">Servicio</th>
+                                    <th class="w-25">Hora de inicio</th>
+                                    <th class="w-50">Persona que realiza el servicio</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bodyServices">
 
+                            </tbody>
+                        </table>
+                        {{-- <div class="row" id="divDomSummary">
+
+                        </div> --}}
                     </div>
                 </div>
             </div>

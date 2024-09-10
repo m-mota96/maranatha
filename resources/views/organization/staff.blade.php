@@ -187,6 +187,8 @@
             $('#modalSchedulesStaff #schedulesStaffName').text(staffName);
             $(`#modalSchedulesStaff .tr`).removeClass('bg-success');
             $(`#modalSchedulesStaff .tr`).addClass('bg-danger');
+            $('#noSchedules').prop('checked', true);
+            showHideChedules();
             
             if (schedulesStaff.length > 0) {
                 schedulesStaff.forEach(s => {
@@ -249,6 +251,19 @@
         function deletePreview() {
             $('#modalImageProfile #btnDeletePreview').addClass('hidden');
             myDropzone.removeAllFiles();
+        }
+
+        function showHideChedules() {
+            $('#divChedulesGeneral .form-control').val('');
+            if ($('input[name=checkSchedules]:checked').val() == 'YES') {
+                $('#divChedulesGeneral').removeClass('hidden');
+            } else {
+                $('#divChedulesGeneral').addClass('hidden');
+            }
+        }
+
+        function setHour(value, inputClass) {
+            $('.'+inputClass).val(value);
         }
 
         $('#modalImageProfileForm').submit((e)=> {

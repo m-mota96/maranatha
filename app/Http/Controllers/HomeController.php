@@ -26,21 +26,26 @@ class HomeController extends Controller
         $hourStartQuote = $request->horary;
         $addTime        = 0;
 
-        $services = Service::whereIn('id', $servicesId)->select('id', 'name', 'time')->get();
-        foreach ($services as $key => $s) {
-            $addTime = $addTime + $s->time;
-        }
-        $hourEndQuote = date("H:i", strtotime($hourStartQuote) + ($addTime * 60) );
-        dd($hourStartQuote.' - '.$hourEndQuote);
+        // $services = Service::whereIn('id', $servicesId)->select('id', 'name', 'time')->get();
+        // foreach ($services as $key => $s) {
+        //     $addTime = $addTime + $s->time;
+        // }
+        // $hourEndQuote = date("H:i", strtotime($hourStartQuote) + ($addTime * 60) );
+        // dd($hourStartQuote.' - '.$hourEndQuote);
 
-        $staff = Staff::where('status', 1)
+        $staff = Staff::with(['schedules', 'services'])->where('status', 1)
         ->whereHas('schedules', function($query) use($numberDayWeek) {
             $query->where('day', $numberDayWeek)->where('status', 1);
         })
-        ->whereHas('services', function($query) use($services) {
-            $query->whereIn('id', $services);
+        ->whereHas('services', function($query) use($servicesId) {
+            $query->whereIn('id', $servicesId);
         })
         ->get();
-        dd($staff);
+        
+        return response()->json([
+            'error' => false,
+            'msj'   => '',
+            'data'  => $staff
+        ], 200);
     }
 }

@@ -47,7 +47,9 @@
 @section('scripts')
     <script src="{{asset('jquery-ui-1.13.2/jquery-ui.js')}}"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <script src="{{asset('js/moment.min.js')}}"></script>
     <script>
+        const formatMxn = new Intl.NumberFormat("en", { style: "currency", "currency": "MXN" });
         const serviceTypes = @json($serviceTypes);
 
         $.fn.datepicker.dates['es'] = {
@@ -108,7 +110,10 @@
                     services: arrayServicesActive
                 },
                 success: (res)=> {
-
+                    // console.log(res.data);
+                    // console.log(arrayServicesActive);
+                    // console.log(summaryServices);
+                    createDomSummary(res.data);
                 },
                 error: ()=> {
                     Swal.fire({
@@ -117,6 +122,54 @@
                     });
                 }
             });
+        }
+
+        function createDomSummary(staff) {
+            let html = '';
+            let serviceIdAux = 0;
+            html += `
+            <div class="col-xl-3">`;
+                let initialHour = $('#modalQuotes #horary').val();
+                let horary = $('#modalQuotes #horary').val();
+                summaryServices.forEach((s, i) => {
+                    
+                    for (let i = 0; i < s.serviceQuantity; i++) {
+                        html += '<tr>';
+                            html += `<td class="w-25">${s.serviceName} ${i+1}</td>`;
+                            html += `<td class="w-25"><input class="form-control form-control-sm" type="time" value="${horary}"></td>`;
+                            html += `<td class="w-50">`;
+                                if (s.serviceId != 8 && s.serviceId != 9) {
+                                    html += `<select class="form-control form-control-sm">`;
+                                        html += '<option value="" selected disabled>Elija al staff</option>';
+                                        staff.forEach(st => {
+                                            let staffService = verifyServiceStaff(s.serviceId, st.services);
+                                            if (staffService) {
+                                                html += `<option value="${st.id}">${st.name} ${st.first_name} ${st.last_name}</option>`;
+                                            }
+                                        });
+                                    html +=`</select>`;
+                                }
+                            html+= `</td>`;
+                        html += '</tr>';
+                    }
+                    horary = moment(initialHour, 'h:mm:ss')
+                    .add(s.serviceTime, 'minutes')
+                    .format('LT');
+                    horary = moment(horary, "h:mm:ss A").format("HH:mm");
+                    initialHour = horary;
+                });
+            html += `</div>`;
+            $('#modalQuotes #bodyServices').html(html);
+        }
+
+        function verifyServiceStaff(serviceId, staffServices) {
+            let valid = false;
+            staffServices.forEach(s => {
+                if (serviceId == s.id) {
+                    valid = true;
+                }
+            });
+            return valid;
         }
 
         var summaryServices = [], arrayServicesActive = [];
@@ -221,7 +274,7 @@
                 html += `
                     <div class="col-xl-12 relative ${bg}" id="divService-${s.id}">
                         <input class="form-check-input fs-normal pointer me-1 servicesSelected" type="checkbox" id="service-${s.id}" value="${s.id}" data-time="${s.time}" data-price="${s.price}" data-name="${s.name}" onchange="verifyCheckUncheckService(${s.id})">
-                        <label class="pointer selection-disable bold mt-1" for="service-${s.id}">${s.name}</label>
+                        <label class="pointer selection-disable bold mt-1" for="service-${s.id}">${s.name} (${formatMxn.format(s.price).substring(2)} - ${s.time} min.)</label>
                         <span class="contentNumberService absolute right"></span>
                     </div>
                 `;

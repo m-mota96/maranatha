@@ -75,20 +75,33 @@ class StaffController extends Controller
     }
 
     public function updateSchedulesStaff(Request $request) {
-        for ($i=0; $i < sizeof($request->day); $i++) { 
-            $data[] = [
-                'staff_id' => $request->schedulesStaffId,
-                'day' => $request->day[$i],
-                'start_time' => $request->startTime[$i],
-                'end_time' => $request->endTime[$i],
-                'meal_start_time' => $request->mealStartTime[$i],
-                'meal_end_time' => $request->mealEndTime[$i],
-                'status' => isset($request->activeDay[$i]) ? 1 : 0,
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            ];
+        $schedules = StaffSchedule::where('staff_id', $request->schedulesStaffId)->get();
+        if (sizeof($schedules) == 0) {
+            for ($i=0; $i < sizeof($request->day); $i++) { 
+                $data[] = [
+                    'staff_id' => $request->schedulesStaffId,
+                    'day' => $request->day[$i],
+                    'start_time' => $request->startTime[$i],
+                    'end_time' => $request->endTime[$i],
+                    'meal_start_time' => $request->mealStartTime[$i],
+                    'meal_end_time' => $request->mealEndTime[$i],
+                    'status' => isset($request->activeDay[$i]) ? 1 : 0,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ];
+            }
+            StaffSchedule::insert($data);
+        } else {
+            foreach ($schedules as $key => $s) {
+                $schedule = StaffSchedule::find($s->id);
+                $schedule->start_time = $request->startTime[$key];
+                $schedule->end_time = $request->endTime[$key];
+                $schedule->meal_start_time = $request->mealStartTime[$key];
+                $schedule->meal_end_time = $request->mealEndTime[$key];
+                $schedule->status = isset($request->activeDay[$key]) ? 1 : 0;
+                $schedule->save();
+            }
         }
-        StaffSchedule::insert($data);
         return response()->json([
             'error' => false,
             'msj'   => 'Los horarios se actualizaron correctamente'
